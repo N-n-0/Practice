@@ -108,34 +108,34 @@
 GET https://api.openweathermap.org/data/2.5/forecast?lat=53.53&lon=27.34&appid=YOU_API_KEY 
 ```
 + 304 <a name="304"></a>
-```
+```http
 GET https://api.openweathermap.org/data/2.5/forecast?lat=53.53&lon=27.34&appid=YOU_API_KEY (с заголовком 'If-None-Match': '*')
 ```
 + 400 <a name="400r"></a>
-```
+```http
 GET https://api.openweathermap.org/data/2.5/forecast?lat=53.53&appid=YOU_API_KEY
 ```
 + 401 <a name="401"></a>
-```
+```http
 GET https://api.openweathermap.org/data/2.5/forecast?lat=53.53&lon=27.34
 ```
 + 404 <a name="404"></a>
-```
+```http
 GET https://api.openweathermap.org/data/2/forecast?lat=53.53&lon=27.34&appid=YOU_API_KEY
 ```
 + 405 <a name="405"></a>
-```
+```http
 PATCH https://api.openweathermap.org/data/2.5/forecast?lat=53.53&lon=27.34&appid=YOU_API_KEY
 ```
 + 412 <a name="412"></a>
-```
+```http
 PATCH https://api.openweathermap.org/data/2.5/forecast?lat=53.53&lon=27.34&appid=YOU_API_KEY (с заголовком 'If-Match': 'sometext')
 ```
 + 413 <a name="413"></a>
-```
+```http
 PATCH https://api.openweathermap.org/data/2.5/forecast?lat=53.53&lon=27.34&appid=YOU_API_KEY (с заголовком 'Content-Length': '1000000000')
 ```
 + 414 <a name="414"></a>
-```
+```http
 PATCH https://api.openweathermap.org/data/2.5/forecast?lat=53.53&lon=27.34&appid=YOU_API_KEY&p={VERY_LONG_URI}
 ```
