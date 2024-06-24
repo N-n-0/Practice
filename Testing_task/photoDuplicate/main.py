@@ -6,29 +6,44 @@ from PIL import Image, ImageDraw, ImageFont
 from imagehash import average_hash
 
 
-def input_dir(hash_dict=None):
-    path_pic = input('Enter directory path: ')
+def input_paths():
+    while True:
+        path1 = input("Enter directory path: ")
+        if os.path.exists(path1):
+            break
+        else:
+            print("Wrong path. Try again.")
 
-    if not os.path.exists(path_pic):
-        print('Directory doesn\'t exist')
-        return input_dir(hash_dict)
-
-    if hash_dict is None:
-        hash_dict = {}
-    for root, dirs, files in os.walk(path_pic):
-        for file in files:
-            if is_valid_image(f'{root}/{file}'):
-                pic = Image.open(f'{root}/{file}')
-                pic_hash = average_hash(pic)
-                if pic_hash in hash_dict.keys():
-                    hash_dict[pic_hash].append(f'{root}/{file}')
+    while True:
+        choice = input("Compare images from other directory? (Y/N) ")
+        if choice.lower() == 'y' or choice.lower() == 'yes':
+            while True:
+                path2 = input("Enter second directory path: ")
+                if os.path.exists(path2):
+                    return path1, path2
                 else:
-                    hash_dict[pic_hash] = [f'{root}/{file}']
-            else:
-                print(f'{root}/{file} is broke')
+                    print("Wrong path. Try again.")
+        elif choice.lower() == 'n' or choice.lower() == 'no':
+            return path1, None
+        else:
+            print("Enter 'y' or 'n'.")
 
-    if input('Compare images from other directory? Y/N\t').lower() == 'y':
-        hash_dict = input_dir(hash_dict)
+
+def make_hash_dict(paths):
+    hash_dict = {}
+    for path in paths:
+        if path is not None:
+            for root, dirs, files in os.walk(path):
+                for file in files:
+                    if is_valid_image(f'{root}/{file}'):
+                        pic = Image.open(f'{root}/{file}')
+                        pic_hash = average_hash(pic)
+                        if pic_hash in hash_dict.keys():
+                            hash_dict[pic_hash].append(f'{root}/{file}')
+                        else:
+                            hash_dict[pic_hash] = [f'{root}/{file}']
+                    else:
+                        print(f'{root}/{file} is broke')
 
     for key, value in hash_dict.items():
         hash_dict[key] = list(set(value))
@@ -76,7 +91,7 @@ def photo_visualisation(key, photo_paths):
     collage.save(f'output/Group{key}.jpg')
 
 
-def clear_output():
+def clear_output_dir():
     for filename in os.listdir('output'):
         file_path = os.path.join('output', filename)
         try:
@@ -85,13 +100,13 @@ def clear_output():
             elif os.path.isdir(file_path):
                 shutil.rmtree(file_path)
         except Exception as e:
-            print(f"Ошибка при удалении файла {file_path}: {e}")
+            print(f"Error with deleting {file_path}: {e}")
 
 
 def main():
-    hash_dict = input_dir()
+    hash_dict = make_hash_dict(input_paths())
     group_counter = 1
-    clear_output()
+    clear_output_dir()
     for value in hash_dict.values():
         if len(value) > 1:
             photo_visualisation(group_counter, value)
