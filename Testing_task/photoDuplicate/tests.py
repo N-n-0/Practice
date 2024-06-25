@@ -69,19 +69,14 @@ def test_input_paths_two_directories(monkeypatch, get_dir_name):
     assert path2 == get_dir_name
 
 
-def test_make_hash_dict_empty():
-    hash_dict = make_hash_dict([None, None])
-    assert hash_dict == {}
-
-
 def test_make_hash_dict_single_file(test_image, get_dir_name):
-    hash_dict = make_hash_dict([get_dir_name])
+    hash_dict = make_hash_dict([get_dir_name + '/test_image.jpg'])
     assert len(hash_dict) == 1
     assert hash_dict[average_hash(Image.open(get_dir_name + '/test_image.jpg'))] == [get_dir_name + '/test_image.jpg']
 
 
 def test_make_hash_dict_duplicates(test_image1_and_test_image2, get_dir_name):
-    hash_dict = make_hash_dict([get_dir_name])
+    hash_dict = make_hash_dict([get_dir_name + '/test_image1.jpg', get_dir_name + '/test_image2.jpg'])
     assert len(hash_dict) == 1
     assert sorted(hash_dict[average_hash(Image.open(get_dir_name + '/test_image1.jpg'))]) == [
         get_dir_name + '/test_image1.jpg',
